@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Prediction Center</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      :root {
+        --nav-bg: rgba(255, 255, 255, 0.1);
+        --nav-blur: blur(15px);
+        --nav-text: #ffffff;
+        --nav-glow: #ff4d4d;
+        --bg-gradient: linear-gradient(to bottom, #1f1c1c, #ffcccc);
+      }
+
+      body {
+        background: var(--bg-gradient);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .prediction-container {
+        padding-top: 100px;
+        padding-bottom: 60px;
+        max-width: 1300px;
+        margin: auto;
+      }
+
+      .card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #fff;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 14px 30px rgba(255, 77, 77, 0.3);
+      }
+
+      .card img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+      }
+
+      .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        padding: 1.2rem;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+      @media (min-width: 992px) {
+    .col-lg-2 {
+        -ms-flex: 0 0 16.666667%;
+        flex: 0 0 19.666667%;
+        max-width: 23.666667%;
+    }
+}
+      .btn-danger {
+        background-color: #b71c1c;
+        border: none;
+        border-radius: 25px;
+        padding: 0.4rem 1rem;
+        font-weight: bold;
+      }
+
+      .btn-danger:hover {
+        background-color: #d32f2f;
+      }
+
+      h3 {
+        text-align: center;
+        margin-top: 60px;
+        margin-bottom: 60px;
+        font-size: 40px;
+        color: #fff;
+         text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d, 0 0 20px #ff4d4d,
+          0 0 40px #ff1a1a, 0 0 60px #e60000;
+        animation: pulseGlow 2s infinite alternate;
+      }
+
+       @keyframes pulseGlow {
+        from {
+          text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d, 0 0 20px #ff4d4d,
+            0 0 40px #ff1a1a, 0 0 60px #e60000;
+        }
+        to {
+          text-shadow: 0 0 10px #ff8080, 0 0 20px #ff6666, 0 0 30px #ff1a1a,
+            0 0 50px #cc0000, 0 0 80px #b30000;
+        }
+      }
+
+      /* Navbar */
+      .custom-navbar {
+        height: 70px;
+        background-color: #121212 !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .custom-navbar .nav-link,
+      .custom-navbar .navbar-brand {
+        color: #ffffff !important;
+        font-weight: 500;
+        text-shadow: 1px 1px 3px #000;
+      }
+
+      .custom-navbar .nav-link:hover {
+        color: #ff4d4d !important;
+      }
+
+      .beat-icon {
+        color: #ff4d4d;
+        animation: heartbeat 1.5s infinite ease-in-out;
+      }
+
+      @keyframes heartbeat {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.25);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar fixed-top shadow-lg">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+          <i class="fas fa-heartbeat fa-2x beat-icon mr-2"></i> AI Healthcare System
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto align-items-center">
+            <li class="nav-item mx-2">
+              <a class="nav-link" href="{{ url_for('index') }}">
+                <i class="fas fa-home mr-1"></i> Home
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Prediction Cards -->
+    <div class="container prediction-container">
+      <h3>Select a Prediction Service</h3>
+      <div class="row">
+        <!-- 5 Cards -->
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+          <div class="card">
+            <img src="/static/disease.jpg" alt="Disease Prediction" />
+            <div class="card-body">
+              <h5 class="card-title">Disease Prediction</h5>
+              <a href="/disease_pred" class="btn btn-danger">Start</a>
+            </div>
+          </div>
+        </div>
+
+
+         <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+          <div class="card">
+            <img src="/static/3.jpg" alt="Heart Disease" />
+            <div class="card-body">
+              <h5 class="card-title">Heart Disease</h5>
+              <a href="/heart" class="btn btn-danger">Start</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+          <div class="card">
+            <img src="/static/drug.jpg" alt="Drug Prediction" />
+            <div class="card-body">
+              <h5 class="card-title">Drug Prediction</h5>
+              <a href="/drug_pred" class="btn btn-danger">Start</a>
+            </div>
+          </div>
+        </div>
+
+       
+
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+          <div class="card">
+            <img src="/static/diabetes.jpg" alt="Diabetes" />
+            <div class="card-body">
+              <h5 class="card-title">Diabetes</h5>
+              <a href="/diabetes_pred" class="btn btn-danger">Start</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+          <div class="card">
+            <img src="/static/chatbot.jpg" alt="AI Chatbot" />
+            <div class="card-body">
+              <h5 class="card-title">AI Chatbot</h5>
+              <button onclick="startChatbot()" class="btn btn-danger">Start</button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+  function startChatbot() {
+    window.location.href = "{{ url_for('chatbot') }}";
+  }
+</script>
+</html>

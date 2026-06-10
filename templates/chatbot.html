@@ -1,0 +1,224 @@
+<!-- templates/chatbot.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Healthcare Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap & Font Awesome -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(to bottom, #1f1c1c, #ffcccc);
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-gradient);
+      margin: 0;
+      padding-top: 100px;
+      padding-bottom: 70px;
+    }
+
+    h3.chat-title {
+      text-align: center;
+      font-size: 45px;
+      color: #f1f1f1;
+      text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d, 0 0 20px #ff4d4d,
+        0 0 40px #ff1a1a, 0 0 60px #e60000;
+      animation: pulseGlow 2s infinite alternate;
+      margin-bottom: 30px;
+    }
+
+    @keyframes pulseGlow {
+      from {
+        text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d, 0 0 20px #ff4d4d,
+          0 0 40px #ff1a1a, 0 0 60px #e60000;
+      }
+      to {
+        text-shadow: 0 0 10px #ff8080, 0 0 20px #ff6666, 0 0 30px #ff1a1a,
+          0 0 50px #cc0000, 0 0 80px #b30000;
+      }
+    }
+
+    .chatbox {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .chatlog {
+      height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 45px;
+      background: #f9f9f9;
+      border-radius: 6px;
+    }
+
+    .user-msg {
+      text-align: right;
+      color: #007bff;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .bot-msg {
+      text-align: left;
+      color: green;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    #user-input {
+      width: 80%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button[type="submit"] {
+      padding: 10px 15px;
+      border: none;
+      background-color: #b71c1c;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #d32f2f;
+    }
+      .custom-navbar {
+        height: 70px;
+        background-color: #121212 !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .custom-navbar .nav-link,
+      .custom-navbar .navbar-brand {
+        color: #ffffff !important;
+        font-weight: 500;
+        text-shadow: 1px 1px 3px #000;
+      }
+
+      .custom-navbar .nav-link:hover {
+        color: #ff4d4d !important;
+        transform: translateY(-2px);
+        text-shadow: 2px 2px 6px #ff4d4d;
+      }
+
+      .beat-icon {
+        color: #ff4d4d;
+        animation: heartbeat 1.5s infinite ease-in-out;
+      }
+
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.25);
+        }
+      }
+
+      .navbar-scrolled {
+        background-color: rgba(0, 0, 0, 0.7) !important;
+        padding: 5px 0 !important;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar (DO NOT CHANGE STYLES) -->
+   <nav class="navbar navbar-expand-lg custom-navbar fixed-top shadow-lg">
+      <div class="container">
+        <a
+          class="navbar-brand d-flex align-items-center"
+          href="{{ url_for('index') }}"
+        >
+          <i class="fas fa-heartbeat fa-2x beat-icon mr-2"></i> AI Healthcare
+          System
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto align-items-center">
+            <li class="nav-item mx-2">
+              <a class="nav-link text-white" href="{{ url_for('index') }}">
+                <i class="fas fa-home mr-1"></i> Home
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  <!-- Chatbot Section -->
+  <div class="container">
+    <h3 class="chat-title">Healthcare Chatbot</h3>
+
+    <div class="chatbox">
+      <div id="chatlog" class="chatlog"></div>
+
+      <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Type your question..." autocomplete="off" required />
+        <button type="submit">Send</button>
+      </form>
+
+      <a href="{{ url_for('select_option') }}">← Back to Menu</a>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    const form = document.getElementById("chat-form");
+    const userInput = document.getElementById("user-input");
+    const chatLog = document.getElementById("chatlog");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = userInput.value;
+      chatLog.innerHTML += `<div class="user-msg">You: ${msg}</div>`;
+      userInput.value = "";
+
+      const res = await fetch("/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg }),
+      });
+      const data = await res.json();
+      chatLog.innerHTML += `<div class="bot-msg">Bot: ${data.response}</div>`;
+      chatLog.scrollTop = chatLog.scrollHeight;
+    });
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    window.addEventListener("scroll", function () {
+      const navbar = document.querySelector(".custom-navbar");
+      navbar.classList.toggle("navbar-scrolled", window.scrollY > 10);
+    });
+  </script>
+</body>
+</html>

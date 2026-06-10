@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Disease Predictor</title>
+  <link
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --nav-bg: rgba(255, 255, 255, 0.1);
+      --nav-blur: blur(15px);
+      --nav-text: #ffffff;
+      --nav-glow: #ff4d4d;
+      --bg-gradient: linear-gradient(to bottom, #1f1c1c, #ffcccc);
+    }
+
+    body {
+      background: var(--bg-gradient);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: #222;    }
+
+    .custom-navbar {
+      height: 70px;
+      background-color: #121212 !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .custom-navbar .nav-link,
+    .custom-navbar .navbar-brand {
+      color: #ffffff !important;
+      font-weight: 500;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    .custom-navbar .nav-link:hover {
+      color: #ff4d4d !important;
+      transform: translateY(-2px);
+      text-shadow: 2px 2px 6px #ff4d4d;
+    }
+
+    .beat-icon {
+      color: #ff4d4d;
+      animation: heartbeat 1.5s infinite ease-in-out;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+    }
+
+    .navbar-scrolled {
+      background-color: rgba(0, 0, 0, 0.7) !important;
+      padding: 5px 0 !important;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 120px;
+      font-size: 45px;
+      color: #f1f1f1;
+      text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d, 0 0 20px #ff4d4d,
+        0 0 40px #ff1a1a, 0 0 60px #e60000;
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from {
+        text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d, 0 0 20px #ff4d4d,
+          0 0 40px #ff1a1a, 0 0 60px #e60000;
+      }
+      to {
+        text-shadow: 0 0 10px #ff8080, 0 0 20px #ff6666, 0 0 30px #ff1a1a,
+          0 0 50px #cc0000, 0 0 80px #b30000;
+      }
+    }
+
+    .form-section {
+      margin: 50px auto;
+      max-width: 700px;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .result-box {
+      background: #fff8f0;
+      border-left: 6px solid #b71c1c;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 40px;
+    }
+
+    .result-box h3 {
+      color: #b71c1c;
+      font-weight: bold;
+    }
+
+    .result-box p strong {
+      color: #e53935;
+    }
+
+    .result-box ul li {
+      padding: 4px 0;
+      font-weight: 500;
+    }
+
+    .result-section {
+      margin-top: 20px;
+    }
+
+    .badge-tag {
+      display: inline-block;
+      background: #ffebee;
+      color: #c62828;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 500;
+      margin: 4px 4px;
+    }
+     footer {
+        margin-top: 110px;
+        padding: 15px;
+        background-color: #b71c1c;
+        color: white;
+        text-align: center;
+      }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg custom-navbar fixed-top shadow-lg">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <i class="fas fa-heartbeat fa-2x beat-icon mr-2"></i> AI Healthcare System
+      </a>
+    </div>
+     <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto align-items-center">
+            <li class="nav-item mx-2">
+              <a class="nav-link text-white" href="{{ url_for('index') }}">
+                <i class="fas fa-home mr-1"></i> Home
+              </a>
+            </li>
+          </ul>
+        </div>
+  </nav>
+
+  <h2>Disease Prediction System</h2>
+
+  <div class="container form-section">
+    <form method="POST" autocomplete="off">
+      <label for="symptoms"><strong>Enter symptoms (comma-separated):</strong></label><br><br>
+      <input type="text" name="symptoms" id="symptoms" class="form-control" value="{{ symptoms or '' }}" required>
+      <br>
+      <button type="submit" class="btn btn-danger btn-block">Predict</button>
+    </form>
+
+    {% if disease %}
+    <div class="result-box">
+      <h3>Predicted Disease: <span class="badge badge-danger">{{ disease }}</span></h3>
+
+      <div class="result-section">
+        <p><strong>Description:</strong> {{ description }}</p>
+      </div>
+
+      <div class="result-section">
+        <h5>Precautions:</h5>
+        <ul>
+          {% for p in precautions %}
+          <li><span class="badge-tag">{{ p }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="result-section">
+        <h5>Medications:</h5>
+        <ul>
+          {% for m in medications %}
+          <li><i class="fas fa-capsules mr-2 text-danger"></i>{{ m }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="result-section">
+        <h5>Workout Recommendations:</h5>
+        <ul>
+          {% for w in workout %}
+          <li><i class="fas fa-dumbbell mr-2 text-warning"></i>{{ w }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="result-section">
+        <h5>Diet Plan:</h5>
+        <ul>
+          {% for d in diet %}
+          <li><i class="fas fa-carrot mr-2 text-success"></i>{{ d }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    window.addEventListener("scroll", function () {
+      const navbar = document.querySelector(".custom-navbar");
+      navbar.classList.toggle("navbar-scrolled", window.scrollY > 10);
+    });
+  </script>
+
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 HeartCare AI | Be Informed. Stay Healthy.</p>
+    </footer>
+</body>
+</html>
